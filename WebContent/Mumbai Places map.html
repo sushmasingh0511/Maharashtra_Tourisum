@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6pXMBBmopSotPkYVBG0fOLsU5vo7F4-Q&callback=initialize"></script>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyD6pXMBBmopSotPkYVBG0fOLsU5vo7F4-Q&sensor=false"></script>
+<script type="text/javascript">
+	var contentstring = [];
+	var regionlocation = [];
+	var markers = [];
+	var iterator = 0;
+	var areaiterator = 0;
+	var map;
+	var infowindow = [];
+	geocoder = new google.maps.Geocoder();
+	
+	$(document).ready(function () {
+		setTimeout(function() { initialize(); }, 400);
+	});
+	
+	function initialize() {           
+		infowindow = [];
+		markers = [];
+		GetValues();
+		iterator = 0;
+		areaiterator = 0;
+		region = new google.maps.LatLng(regionlocation[areaiterator].split(',')[0], regionlocation[areaiterator].split(',')[1]);
+		map = new google.maps.Map(document.getElementById("Map"), { 
+			zoom: 8,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			center: region,
+		});
+		drop();
+	}
+	
+	function GetValues() {
+		//Get the Latitude and Longitude of a Point site : http://itouchmap.com/latlong.html
+		contentstring[0] = "Alibaug,Mumbai,Maharashtra";
+		regionlocation[0] = "18.6400,72.8800";
+
+		contentstring[1] = "GateWay India,Mumbai,Maharashtra";
+		regionlocation[1] = "18.921836, 72.834705 ";
+					
+		contentstring[2] = "Girigaon chaupati, Mumbai, Maharastra";
+		regionlocation[2] = "18.951, 72.811 ";
+		
+		contentstring[3] = "Hanging Gardens, Mumbai, Maharastra";
+		regionlocation[3] = "18.956724,72.804937";
+		
+		contentstring[4] = "Haji Ali Dargah,Mumbai, Maharastra";
+		regionlocation[4] = "18.985, 72.81 ";
+		
+		contentstring[5] = "Adlabs Imagica, Mumbai, Maharastra";
+		regionlocation[5] = "18.7671, 73.2807";
+		
+                	 contentstring[6] = "Flora fountain,Mumbai, Maharastra";
+		regionlocation[6] = "18.9325, 72.8317";
+
+	
+		contentstring[7] = "Marine Drive,Mumbai, Maharastra";
+		regionlocation[7] = "18.944, 72.823";
+
+		
+            		 contentstring[8] = "Sidhhivinayak Mandir,Mumbai, Maharastra";
+		regionlocation[8] = "19.016920, 72.830409";
+                
+       
+
+		}
+		   
+	function drop() {
+		for (var i = 0; i < contentstring.length; i++) {
+			setTimeout(function() {
+				addMarker();
+			}, 800);
+		}
+	}
+ 
+	function addMarker() {
+		var address = contentstring[areaiterator];
+		var icons = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+		var templat = regionlocation[areaiterator].split(',')[0];
+		var templong = regionlocation[areaiterator].split(',')[1];
+		var temp_latLng = new google.maps.LatLng(templat, templong);
+		markers.push(new google.maps.Marker(
+		{
+			position: temp_latLng,
+			map: map,
+			icon: icons,
+			draggable: false
+			
+		}));            
+		iterator++;
+		info(iterator);
+		areaiterator++;
+	}
+ 
+	function info(i) {
+		infowindow[i] = new google.maps.InfoWindow({
+			content: contentstring[i - 1]
+		});
+		infowindow[i].content = contentstring[i - 1];
+		google.maps.event.addListener(markers[i - 1], 'click', function() {
+			for (var j = 1; j < contentstring.length + 1; j++) {
+				infowindow[j].close();
+			}
+			infowindow[i].open(map, markers[i - 1]);
+		});
+	}
+
+var markers = [];
+    var infowindows = [];
+
+    // add shops or malls
+    for (var key in data.markers) {
+      if (data.markers.hasOwnProperty(key)) {
+        infowindows[key] = new google.maps.InfoWindow({
+            content: data.markers[key].infowindow
+        });
+
+        markers[key] = new google.maps.Marker({
+                position: new google.maps.LatLng(data.markers[key].location.lat, data.markers[key].location.lng),
+                map: map,
+                flat: true,
+                title: data.markers[key].name,
+                draggable: false
+        });
+        var iconFile = 'http://maps.google.com/mapfiles/ms/icons/'+marker_color+'-dot.png';
+        markers[key].setIcon(iconFile);
+
+        google.maps.event.addListener(markers[key], 'click', function() {
+          infowindows[key].open(map, markers[key]);
+        });
+      }
+    }
+</script>
+
+</head>
+
+<body>
+<div id="Map" style="width: 1200px; height: 500px;"></div>
+</body>
+</html>
